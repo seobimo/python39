@@ -1,10 +1,11 @@
+import pymysql
 
-sjs = []
 
+# sungjuk.dat 파일을 읽어서 sjs 변수에 초기화
 
 def displayMenu():
     main_menu = f'''
-    성적 처리 프로그램 v5
+    성적 처리 프로그램 v7
     ----------------
     1. 성적 데이터 추가
     2. 성적 데이터 조회
@@ -18,17 +19,15 @@ def displayMenu():
 
     return menu
 
-
 def inputSungJuk():
     name = input('이름은?')
     kor = int(input('국어는?'))
     eng = int(input('영어는?'))
     mat = int(input('수학은?'))
 
-    sj = {'name': name, 'kor': kor, 'eng': eng, 'mat': mat}
-
+    # sj = {'name': name, 'kor': kor, 'eng': eng, 'mat': mat}
+    sj = [name, kor, eng, mat]
     return sj
-
 
 def addSungJuk():
     # 성적 데이터 입력받기
@@ -37,70 +36,60 @@ def addSungJuk():
     # 입력받은 성적데이터 초기화
     tot, avg, grd = computeSungJuk(sj)
 
-    sj['tot'] = tot
-    sj['avg'] = avg
-    sj['grd'] = grd
+    #sj['tot'] = tot
+    #sj['avg'] = avg
+    #sj['grd'] = grd
 
-    sjs.append(sj)
+    # +: 2개의 리스트를 하나로 합쳐서 하나의 리스트로 만듦
+    sj = sj + [tot, avg, grd]
 
+    # 처리된 성적데이터를 sungjuk 테이블에 저장
+    #pass
 
 def readSungJuk():
     hdr = '이름 국어 영어 수학\n'
     hdr += '------------------'
     print(hdr)
 
-    for sj in sjs:
-        print(f'{sj["name"]} {sj["kor"]} {sj["eng"]} {sj["mat"]}')
-
+    # 성적테이블에서 '이름/국어/영어/수학' 만 select해서 출력
 
 def readOneSungJuk():
     name = input('조회할 학생의 이름은?')
 
-    sj = None
-    for item in sjs:
-        if item['name'] == name: sj = item
-
     hdr = '이름 국어 영어 수학 총점 평균 학점\n'
     hdr = '------------------------------\n'
-    for k in sj.keys():
-        print(sj.get(k), end=' ')
+    print(hdr)
 
+    # 입력한 학생이름으로 성적테이블을 조회해서
+    # 조회된 결과를 출력
 
 def modifySungJuk():
     name = input('수정할 데이터의 학생 이름은?')
 
-    sj = None
-    for i in range(len(sjs)):
-
-        if sjs[i]['name'] == name:
-            idx = i
-            break
+    #수정할 학생이름으로 기존데이터 조회
 
     # 새로운(기존) 값을 입력받음
-    kor = int(input(f'새로운 국어는 ({sjs[idx]["kor"]})?'))
-    eng = int(input(f'새로운 영어는 ({sjs[idx]["eng"]})?'))
-    mat = int(input(f'새로운 수학는 ({sjs[idx]["mat"]})?'))
+    kor = int(input(f'새로운 국어는 ()?'))
+    eng = int(input(f'새로운 영어는 ()?'))
+    mat = int(input(f'새로운 수학는 ()?'))
 
     # 다시 성적 처리
     sj = {'name': name, 'kor': kor, 'eng': eng, 'mat': mat}
     tot, avg, grd = computeSungJuk(sj)
-    sj['tot'] = tot
-    sj['avg'] = avg
-    sj['grd'] = grd
+    sj = sj + [tot, avg, grd]
 
-    # 기존 위치에 다시 저장
-    sjs[idx] = sj
+    # 새롭게 입력된 성적데이터를
+    # 기존 성적데이터에 반영함
+
+
 
 
 def removeSungJuk():
     name = input('삭제할 데이터의 학생 이름은?')
 
-    idx = None
-    for i in range(len(sjs)):  # 삭제할 데이터의 인덱스 조사
-        item = sjs[i]
-        if item['name'] == name: idx = i
+    # 삭제할 학생이름 입력받아 성적테이블에서 해당 데이터 삭제
 
-    sjs.pop(idx)
+    #삭제된 성적데이터를 파일에 반영
 
 def computeSungJuk(sj):
     tot = sj['kor'] + sj['eng'] + sj['mat']
@@ -112,7 +101,3 @@ def computeSungJuk(sj):
     elif avg >= 60: grd = '양'
 
     return tot, avg, grd
-
-
-
-

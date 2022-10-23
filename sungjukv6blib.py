@@ -1,10 +1,31 @@
-
+import json
+# 성적 데이터 저장할 변수 선언
 sjs = []
 
+#파일에 저장된 성적데이터들을 모두 읽어 리스트에 저장
+def loadSungJuk():
+    global sjs
+
+    try:
+        with open('data/sungjukv6b.dat', encoding='UTF-8') as f:
+            data = f.read()
+            sjs = json.loads(data)
+    except:
+        pass
+
+# 성적데이터들을 sungjukv6b.dat 파일에 저장
+# [{'name':name, 'kor':kor, 'eng':eng, 'mat':mat }]
+def saveSungJuk(sjs):
+    # newline : 성적 데이터 저장시 줄바꿈이 2번 저장되는 것을 방지
+    with open('data/sungjukv6b.dat', 'w', encoding='UTF-8') as f:
+
+        # 방금 입력한 성적데이터와
+        # 기존에 입력한 모든 성적 데이터를 JSON형식으로 파일에 함께 저장
+        f.write(json.dumps(sjs, ensure_ascii=False))
 
 def displayMenu():
     main_menu = f'''
-    성적 처리 프로그램 v5
+    성적 처리 프로그램 v6
     ----------------
     1. 성적 데이터 추가
     2. 성적 데이터 조회
@@ -18,7 +39,6 @@ def displayMenu():
 
     return menu
 
-
 def inputSungJuk():
     name = input('이름은?')
     kor = int(input('국어는?'))
@@ -28,7 +48,6 @@ def inputSungJuk():
     sj = {'name': name, 'kor': kor, 'eng': eng, 'mat': mat}
 
     return sj
-
 
 def addSungJuk():
     # 성적 데이터 입력받기
@@ -43,6 +62,8 @@ def addSungJuk():
 
     sjs.append(sj)
 
+    # sjs 에 저장된 성적데이터를 파일에 저장
+    saveSungJuk(sjs)
 
 def readSungJuk():
     hdr = '이름 국어 영어 수학\n'
@@ -51,7 +72,6 @@ def readSungJuk():
 
     for sj in sjs:
         print(f'{sj["name"]} {sj["kor"]} {sj["eng"]} {sj["mat"]}')
-
 
 def readOneSungJuk():
     name = input('조회할 학생의 이름은?')
@@ -64,7 +84,6 @@ def readOneSungJuk():
     hdr = '------------------------------\n'
     for k in sj.keys():
         print(sj.get(k), end=' ')
-
 
 def modifySungJuk():
     name = input('수정할 데이터의 학생 이름은?')
@@ -91,6 +110,8 @@ def modifySungJuk():
     # 기존 위치에 다시 저장
     sjs[idx] = sj
 
+    #수정된 성적데이터를 파일에 저장
+    saveSungJuk(sjs)
 
 def removeSungJuk():
     name = input('삭제할 데이터의 학생 이름은?')
@@ -102,6 +123,8 @@ def removeSungJuk():
 
     sjs.pop(idx)
 
+    #삭제된 성적데이터를 파일에 반영
+    saveSungJuk(sjs)
 def computeSungJuk(sj):
     tot = sj['kor'] + sj['eng'] + sj['mat']
     avg = tot / 3
@@ -112,7 +135,3 @@ def computeSungJuk(sj):
     elif avg >= 60: grd = '양'
 
     return tot, avg, grd
-
-
-
-

@@ -66,7 +66,7 @@ with open('member.dat', encoding='UTF-8') as f:
         out = f'{item[0]} {item[1]} {item[2]} {item[3]}'
 print(out, end='')
 
-# 앞 예제에서 파일로 저장한 성적데이터
-# 다음과 같은 형태로 화면에 출
+# 앞 예제에서 파일로 저장한 성적데이터를
+# 다음과 같은 형태로 화면에 출력
 # abc,99,98,99  (이름, 국어, 영어, 수학)
 
