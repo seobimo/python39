@@ -1,6 +1,6 @@
-# CSV를 이용한 성적처리 프로그램
+# mariaDB를 이용한 성적처리 프로그램
 # 성적 처리 프로그램의 모든 함수들은
-# sungjukv6lib.py에 작성하고 모듈명은 sjv6로 줄여서 사용함
+# sungjukv7lib.py에 작성하고 모듈명은 sjv7로 줄여서 사용함
 
 import sungjukv7lib as sjv7
 
